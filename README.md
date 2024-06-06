@@ -14,9 +14,9 @@ In this guide, we will explore how you can integrate Skyflow Elements into exist
 
   
 
--   A Quickstart vault that you created in the previous exercises.
+-   A [Quickstart vault](https://docs.skyflow.com/create-a-vault/)
     
--   VAULT_ID, VAULT_URL for the. You can obtain these by clicking the vault menu icon > Edit vault details.Note your Vault URL and Vault ID values, then click Cancel.
+-   VAULT_ID, VAULT_URL for the vault. You can obtain these by clicking the vault menu icon > Edit vault details .Note your Vault URL and Vault ID values, then click Cancel.
     
 -   Ability to execute shell scripts and install the following on a Command Prompt or Terminal:
     
@@ -34,17 +34,31 @@ In this guide, we will explore how you can integrate Skyflow Elements into exist
 
 ## Create a service account
 
-1.  In Studio, click Settings in the upper navigation.
-    
-2.  In the side navigation, click Vault, then choose the Quickstart vault from the dropdown menu.
-    
-3.  Click on IAM on the side navigation, and then click on Service Accounts > New Service Account.
-    
-4.  For Name, enter "Workshop Integration". For Roles, choose Vault Owner.
-    
-5.  Click Create.
-    
-6.  Your browser downloads a credentials.json file. Store this file in a secure location. You'll need it to generate bearer tokens.
+1. In Studio, find the vault you want to access and click Open.
+
+2. In the side navigation, click Access.
+
+3. Click Service accounts.
+
+4. Click Add service account.
+
+5. For Name enter a value. For example, "Authenticate".
+
+6. For Service account admins, select the admins of your service account.
+
+7. Click Continue.
+
+8. For Authentication, select your authentication type as JWT Tokens.
+
+9. Click Continue.
+
+10. For Assignments, select the resource and roles for which you want to assign to the service account.
+
+11. Click Create Service Account.
+
+12. Your browser downloads a credentials.json file. Store this file in a secure location. You'll need it to generate bearer tokens.
+
+
     
 
 ## Setup Bearer Token Generation Endpoint
