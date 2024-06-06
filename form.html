@@ -1,0 +1,311 @@
+    <html lang="en">
+
+        <head>
+            <meta charset="UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Skyflow Elements</title>
+            <script src="https://js.skyflow.com/v1/index.js"></script>
+            <style>
+                body {
+                    display: flex;
+                flex-direction: column;
+}
+
+                .empty-div {
+                    height: 100px;
+                width: 350px;
+}
+
+                .reveal-view {
+                    margin - top: 48px;
+}
+            </style>
+        </head>
+
+        <body>
+            <h3>Collect Elements</h3>
+            <!-- Collect Part -->
+            <div>
+                <div id="collectName" class="empty-div"></div>
+                <div id="collectSsn" class="empty-div"></div>
+                <div id="collectEmail" class="empty-div"></div>
+                <div id="collectPhone" class="empty-div"></div>
+                <div id="collectDob" class="empty-div"></div>
+                <div>
+                    <button id="collectPIIData">Collect PII Data</button>
+                </div>
+                <div>
+                    <pre id="collectResponse"></pre>
+                </div>
+            </div>
+            <!-- Reveal Part-->
+            <div id="revealView" class="reveal-view">
+                <h3>Reveal Elements</h3>
+                <div id="revealName" class="empty-div"></div>
+                <div id="revealSsn" class="empty-div"></div>
+                <div id="revealEmail" class="empty-div"></div>
+                <div id="revealPhone" class="empty-div"></div>
+                <div id="revealDob" class="empty-div"></div>
+                <div>
+                    <button id="revealPIIData">Reveal PII Data</button>
+                </div>
+            </div>
+
+            <!-- Javascript -->
+            <script>
+               try {
+                    const revealView = document.getElementById('revealView');
+                    revealView.style.visibility = 'hidden';
+                    const skyflow = Skyflow.init({
+                        vaultID: 'VAULT_ID',
+                        vaultURL: 'VAULT_URL',
+                        getBearerToken: () => {
+                            return new Promise((resolve, reject) => {
+                                const Http = new XMLHttpRequest();
+                                Http.onreadystatechange = () => {
+                                    if (Http.readyState === 4 && Http.status === 200) {
+                                        const response = JSON.parse(Http.responseText);
+                                        resolve(response.accessToken);
+                                    }
+                                };
+                                const url = 'http://localhost:3000';
+                                Http.open('GET', url);
+                                Http.send();
+                            });
+                        },
+                        options: {
+                            logLevel: Skyflow.LogLevel.ERROR,
+                            env: Skyflow.Env.PROD,
+                        },
+                    });
+
+                    // Create collect Container.
+                    const collectContainer = skyflow.container(Skyflow.ContainerType.COLLECT);
+
+                    // Custom styles for collect elements.
+                    const collectStylesOptions = {
+                        inputStyles: {
+                            base: {
+                                border: '1px solid #eae8ee',
+                                padding: '10px 16px',
+                                borderRadius: '4px',
+                                color: '#1d1d1d',
+                                marginTop: '4px',
+                                fontFamily: '"Roboto", sans-serif'
+                            },
+                            complete: {
+                                color: '#4caf50',
+                            },
+                            empty: {},
+                            focus: {},
+                            invalid: {
+                                color: '#f44336',
+                            },
+                            global: {
+                                '@import': 'url("https://fonts.googleapis.com/css2?family=Roboto&display=swap")',
+                            }
+                        },
+                        labelStyles: {
+                            base: {
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                fontFamily: '"Roboto", sans-serif'
+                            },
+                            global: {
+                                '@import': 'url("https://fonts.googleapis.com/css2?family=Roboto&display=swap")',
+                            },
+                            requiredAsterisk: {
+                                color: 'red'
+                            }
+                        },
+                        errorTextStyles: {
+                            base: {
+                                color: '#f44336',
+                                fontFamily: '"Roboto", sans-serif'
+                            },
+                            global: {
+                                '@import': 'url("https://fonts.googleapis.com/css2?family=Roboto&display=swap")',
+                            }
+                        },
+                    };
+
+                    // Create collect elements.
+                    const nameElement = collectContainer.create({
+                        table: 'people',
+                        column: 'name',
+                        ...collectStylesOptions,
+                        placeholder: 'Jane Doe',
+                        label: 'Name',
+                        type: Skyflow.ElementType.INPUT_FIELD,
+                    }, {
+                        required: true
+                    });
+
+                    const ssnElement = collectContainer.create({
+                        table: 'people',
+                        column: 'ssn',
+                        ...collectStylesOptions,
+                        placeholder: '111-22-3333',
+                        label: 'SSN',
+                        type: Skyflow.ElementType.INPUT_FIELD,
+                    }, {
+                        required: true
+                    });
+
+                    const emailElement = collectContainer.create({
+                        table: 'people',
+                        column: 'email',
+                        ...collectStylesOptions,
+                        placeholder: 'my@email.demo',
+                        label: 'email',
+                        type: Skyflow.ElementType.INPUT_FIELD,
+                    }, {
+                        required: true
+                    });
+
+                    const dobElement = collectContainer.create({
+                        table: 'people',
+                        column: 'dob',
+                        ...collectStylesOptions,
+                        placeholder: 'YYYY-MM-DD',
+                        label: 'DOB',
+                        type: Skyflow.ElementType.INPUT_FIELD,
+                    }, {
+                        required: true
+                    });
+
+                    const phoneElement = collectContainer.create({
+                        table: 'people',
+                        column: 'phone_number',
+                        ...collectStylesOptions,
+                        placeholder: '123-123-1234',
+                        label: 'Phone Number',
+                        type: Skyflow.ElementType.INPUT_FIELD,
+                    }, {
+                        required: true
+                    });
+
+                    // Mount the elements.
+                    nameElement.mount('#collectName');
+                    ssnElement.mount('#collectSsn');
+                    emailElement.mount('#collectEmail');
+                    phoneElement.mount('#collectPhone');
+                    dobElement.mount('#collectDob');
+
+                    // Collect all elements data.
+                    const collectButton = document.getElementById('collectPIIData');
+                    if (collectButton) {
+                        collectButton.addEventListener('click', () => {
+                            const collectResponse = collectContainer.collect({
+                                tokens: true
+                            });
+                            collectResponse.then(function (response) {
+                                document.getElementById('collectResponse').innerHTML =
+                                    JSON.stringify(response, null, 2);
+
+                                revealView.style.visibility = 'visible';
+
+                                const revealStyleOptions = {
+                                    inputStyles: {
+                                        base: {
+                                            border: '1px solid #eae8ee',
+                                            padding: '10px 16px',
+                                            borderRadius: '4px',
+                                            color: '#1d1d1d',
+                                            marginTop: '4px',
+                                            fontFamily: '"Roboto", sans-serif'
+                                        },
+                                        global: {
+                                            '@import': 'url("https://fonts.googleapis.com/css2?family=Roboto&display=swap")',
+                                        }
+                                    },
+                                    labelStyles: {
+                                        base: {
+                                            fontSize: '16px',
+                                            fontWeight: 'bold',
+                                            fontFamily: '"Roboto", sans-serif'
+                                        },
+                                        global: {
+                                            '@import': 'url("https://fonts.googleapis.com/css2?family=Roboto&display=swap")',
+                                        }
+                                    },
+                                    errorTextStyles: {
+                                        base: {
+                                            color: '#f44336',
+                                            fontFamily: '"Roboto", sans-serif'
+                                        },
+                                        global: {
+                                            '@import': 'url("https://fonts.googleapis.com/css2?family=Roboto&display=swap")',
+                                        }
+                                    },
+                                };
+
+                                // Create Reveal Elements With Tokens.
+                                const fieldsTokenData = response.records[0].fields;
+                                const revealContainer = skyflow.container(
+                                    Skyflow.ContainerType.REVEAL
+                                );
+                                const revealNameElement = revealContainer.create({
+                                    token: fieldsTokenData.name,
+                                    label: 'Name',
+                                    ...revealStyleOptions,
+                                });
+                                revealNameElement.mount('#revealName');
+
+                                const revealSsnElement = revealContainer.create({
+                                    token: fieldsTokenData.ssn,
+                                    label: 'SSN',
+                                    ...revealStyleOptions,
+                                    altText: '###',
+                                });
+                                revealSsnElement.mount('#revealSsn');
+
+                                const revealEmail = revealContainer.create({
+                                    token: fieldsTokenData.email,
+                                    label: 'Email',
+                                    ...revealStyleOptions,
+                                });
+                                revealEmail.mount('#revealEmail');
+
+                                const revealPhone = revealContainer.create({
+                                    token: fieldsTokenData.phone_number,
+                                    label: 'Phone',
+                                    ...revealStyleOptions,
+                                });
+                                revealPhone.mount('#revealPhone');
+
+                                const revealDobElement = revealContainer.create({
+                                    token: fieldsTokenData.dob,
+                                    label: 'DOB',
+                                    ...revealStyleOptions,
+                                });
+                                revealDobElement.mount('#revealDob');
+
+                                const revealButton = document.getElementById('revealPIIData');
+
+                                if (revealButton) {
+                                    revealButton.addEventListener('click', () => {
+                                        revealContainer
+                                            .reveal()
+                                            .then(res => {
+                                                console.log(res);
+                                            })
+                                            .catch(err => {
+                                                console.log(err);
+                                            });
+                                    });
+                                }
+                            })
+                                .catch(err => {
+                                    console.log(err);
+                                });
+                        });
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            </script>
+        </body>
+
+    </html>
