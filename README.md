@@ -125,7 +125,7 @@ Next we will configure the HTML file and supply the vault details needed to invo
     
 -   Defines the reveal elements.Mounts the reveal elements onto the HTML element.
     
--   Configures the Collect PCI Data button to collect data from the collect container and update the reveal element with the token.
+-   Configures the Collect PII Data button to collect data from the collect container and update the reveal element with the token.
     
 -   Configures the Reveal button to reveal the data in the reveal element.
     
@@ -152,6 +152,6 @@ You should see the form.html load in your browser.
   
 2.  Enter data in each column.
   
-3.  Click on the Collect PII Data button. You will see the API response as well as the Reveal Elements section along with the Reveal PCI Data button appear on the page.
+3.  Click on the Collect PII Data button. You will see the API response as well as the Reveal Elements section along with the Reveal PII Data button appear on the page.
   
-4.  Scroll down to the bottom of the page and click on Reveal PCI Data to view detokenized data.
+4.  Scroll down to the bottom of the page and click on Reveal PII Data to view detokenized data.
